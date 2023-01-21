@@ -7,7 +7,7 @@ const {
 const { postToConnection } = require('../utils/api-gateway-management');
 const { ResponseModel } = require('../utils/response-model');
 
-const { USERS_TABLE, AWS_REGION } = process.env;
+const { DUOCHAT_TABLE, AWS_REGION } = process.env;
 
 const client = new DynamoDBClient({ region: AWS_REGION });
 
@@ -24,23 +24,26 @@ exports.handler = async event => {
     });
 
     const getCommand = new GetCommand({
-        TableName: USERS_TABLE,
+        TableName: DUOCHAT_TABLE,
         Key: {
-            id: connectionId,
+            PK: `USER#${connectionId}`,
+            SK: 'LOBBY',
         },
     });
 
     try {
         const { Item } = await ddbDocClient.send(getCommand);
-        Item.channel = channel;
+        Item.SK = `ROOM#${channel}`;
 
         const putCommand = new PutCommand({
-            TableName: USERS_TABLE,
+            TableName: DUOCHAT_TABLE,
             Item,
         });
 
         await ddbDocClient.send(putCommand);
+
         await postToConnection.send(domainName, stage, connectionId, response);
+
         return response;
     } catch (error) {
         const errorResponse = new ResponseModel({

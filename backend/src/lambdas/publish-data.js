@@ -6,7 +6,7 @@ const {
 const { postToConnection } = require('../utils/api-gateway-management');
 const { ResponseModel } = require('../utils/response-model');
 
-const { USERS_TABLE, AWS_REGION } = process.env;
+const { DUOCHAT_TABLE, AWS_REGION } = process.env;
 
 const client = new DynamoDBClient({ region: AWS_REGION });
 
@@ -17,13 +17,15 @@ exports.handler = async event => {
     const { channel, body } = JSON.parse(eventBody);
 
     const scanCommand = new ScanCommand({
-        TableName: USERS_TABLE,
-        FilterExpression: '#channelColumn = :channelName',
+        TableName: DUOCHAT_TABLE,
+        KeyConditionalExpression: '#PK = :PK and begins_with(#PK, :PK)',
         ExpressionAttributeNames: {
-            '#channelColumn': 'channel',
+            '#PK': 'PK',
+            '#SK': 'SK',
         },
         ExpressionAttributeValues: {
-            ':channelName': channel,
+            ':PK': `ROOM#${channel}`,
+            ':SK': 'USER',
         },
     });
 

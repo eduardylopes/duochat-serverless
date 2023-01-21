@@ -6,7 +6,7 @@ const {
 const { postToConnection } = require('../utils/api-gateway-management');
 const { ResponseModel } = require('../utils/response-model');
 
-const { USERS_TABLE, AWS_REGION } = process.env;
+const { DUOCHAT_TABLE, AWS_REGION } = process.env;
 
 const client = new DynamoDBClient({ region: AWS_REGION });
 
@@ -16,7 +16,7 @@ exports.handler = async event => {
     const { connectionId, domainName, stage } = event.requestContext;
 
     const deleteCommand = new DeleteCommand({
-        TableName: USERS_TABLE,
+        TableName: DUOCHAT_TABLE,
         Key: {
             id: connectionId,
         },
