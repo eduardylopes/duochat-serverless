@@ -1,0 +1,25 @@
+{
+    "name": "duochat-serverless",
+    "version": "1.0.0",
+    "description": "",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "sls:deploy": "serverless deploy",
+        "sls deploy": "serverless deploy",
+        "prettier": "npx prettier --write --ignore-unknown .",
+        "eslint": "npx eslint --fix src --ext .js"
+    },
+    "author": "Eduardy Lopes",
+    "dependencies": {
+        "@aws-sdk/client-apigatewaymanagementapi": "^3.254.0",
+        "@aws-sdk/client-dynamodb": "^3.254.0",
+        "@aws-sdk/lib-dynamodb": "^3.254.0"
+    },
+    "devDependencies": {
+        "eslint": "^8.32.0",
+        "eslint-config-airbnb-base": "^15.0.0",
+        "eslint-config-prettier": "^8.6.0",
+        "eslint-plugin-import": "^2.27.5",
+        "prettier": "^2.8.3"
+    }
+}

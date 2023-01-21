@@ -1,0 +1,78 @@
+frameworkVersion: '3'
+
+org: eduardylopes
+app: duochat
+service: duochat
+
+provider:
+    name: aws
+    runtime: nodejs14.x
+    region: us-east-1
+    stage: develop
+    websocketsApiName: ${self:custom.projectName}
+    websocketsApiRouteSelectionExpression: $request.body.route
+    logs:
+        websocket:
+            level: INFO
+            role: arn:aws:iam::531107396150:role/ApiGatewayLogsRole
+    iamRoleStatements:
+        - Effect: Allow
+          Action:
+              - dynamodb:*
+              - cloudwatch:*
+          Resource: '*'
+    environment:
+        USERS_TABLE: '${self:service}-${self:provider.stage}-users'
+        AWS_REGION: 'sa-east-1'
+
+package:
+    individually: true
+
+custom:
+    projectName: duochat
+
+functions:
+    connect:
+        handler: src/lambdas/connect.handler
+        events:
+            - websocket:
+                  route: $connect
+    disconnect:
+        handler: src/lambdas/disconnect.handler
+        events:
+            - websocket:
+                  route: $disconnect
+    default:
+        handler: src/lambdas/default.handler
+        events:
+            - websocket:
+                  route: $default
+    publishData:
+        handler: src/lambdas/publish-data.handler
+        events:
+            - websocket:
+                  route: publishData
+    channelSubscribe:
+        handler: src/lambdas/channel-subscribe.handler
+        events:
+            - websocket:
+                  route: channelSubscribe
+    redirectMessage:
+        handler: src/lambdas/redirect-message.handler
+        events:
+            - websocket:
+                  route: redirectMessage
+
+resources:
+    Resources:
+        Users:
+            Type: AWS::DynamoDB::Table
+            Properties:
+                AttributeDefinitions:
+                    - AttributeName: Id
+                      AttributeType: S
+                KeySchema:
+                    - AttributeName: Id
+                      KeyType: HASH
+                BillingMode: PAY_PER_REQUEST
+                TableName: '${self:service}-${self:provider.stage}-users'
