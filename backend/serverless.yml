@@ -4,9 +4,13 @@ org: eduardylopes
 app: duochat-serverless
 service: duochat
 
+plugins:
+    - serverless-dynamodb-local
+    - serverless-offline
+
 provider:
     name: aws
-    runtime: nodejs14.x
+    runtime: nodejs16.x
     region: us-east-1
     stage: develop
     websocketsApiName: ${self:custom.projectName}
@@ -15,21 +19,25 @@ provider:
         websocket:
             level: INFO
             role: arn:aws:iam::531107396150:role/ApiGatewayLogsRole
+
     iamRoleStatements:
         - Effect: Allow
           Action:
               - dynamodb:*
               - cloudwatch:*
           Resource: '*'
+
     environment:
         DUOCHAT_TABLE: '${self:service}-${self:provider.stage}'
-        AWS_REGION: 'sa-east-1'
-
-package:
-    individually: true
+        REGION: 'sa-east-1'
 
 custom:
     projectName: duochat
+    dynamodb:
+        start:
+            migrate: true
+        stages:
+            - develop
 
 functions:
     connect:
@@ -47,21 +55,7 @@ functions:
         events:
             - websocket:
                   route: $default
-    publishData:
-        handler: src/lambdas/publish-data.handler
-        events:
-            - websocket:
-                  route: publishData
-    channelSubscribe:
-        handler: src/lambdas/channel-subscribe.handler
-        events:
-            - websocket:
-                  route: channelSubscribe
-    redirectMessage:
-        handler: src/lambdas/redirect-message.handler
-        events:
-            - websocket:
-                  route: redirectMessage
+
     createRoom:
         handler: src/lambdas/create-room.handler
         events:
@@ -69,10 +63,15 @@ functions:
                   path: /room
                   method: POST
                   cors: true
+                  request:
+                      schemas:
+                          application/json:
+                              schema: ${file(src/schemas/create-room-schema.json)}
+                              name: create-room-schema
 
 resources:
     Resources:
-        DuoChat:
+        DuoChatTable:
             Type: AWS::DynamoDB::Table
             Properties:
                 AttributeDefinitions:
@@ -80,10 +79,23 @@ resources:
                       AttributeType: S
                     - AttributeName: SK
                       AttributeType: S
+                    - AttributeName: GSIPK
+                      AttributeType: S
+                    - AttributeName: GSISK
+                      AttributeType: S
                 KeySchema:
                     - AttributeName: PK
                       KeyType: HASH
                     - AttributeName: SK
                       KeyType: RANGE
+                GlobalSecondaryIndexes:
+                    - IndexName: RoomIdIndex
+                      KeySchema:
+                          - AttributeName: GSIPK
+                            KeyType: HASH
+                          - AttributeName: GSISK
+                            KeyType: RANGE
+                      Projection:
+                          ProjectionType: 'ALL'
                 BillingMode: PAY_PER_REQUEST
                 TableName: '${self:service}-${self:provider.stage}'

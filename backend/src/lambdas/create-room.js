@@ -1,51 +1,80 @@
 const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
-const { PutCommand, DynamoDBDocumentClient } = require('@aws-sdk/lib-dynamodb');
-const bcrypt = require('bcryptjs');
+const {
+    PutCommand,
+    DynamoDBDocumentClient,
+    ScanCommand,
+} = require('@aws-sdk/lib-dynamodb');
+
 const { v4 } = require('uuid');
 const { ResponseModel } = require('../utils/response-model');
 
-const { DUOCHAT_TABLE } = process.env;
-const client = new DynamoDBClient({ region: 'sa-east-1' });
-const ddbDocClient = DynamoDBDocumentClient.from(client);
+const { DUOCHAT_TABLE, AWS_REGION } = process.env;
+const client = new DynamoDBClient({
+    region: AWS_REGION,
+    endpoint: 'http://localhost:8000',
+});
+
+const marshallOptions = {
+    removeUndefinedValues: true,
+};
+
+const translateConfig = { marshallOptions };
+
+const ddbDocClient = DynamoDBDocumentClient.from(client, translateConfig);
 
 exports.handler = async event => {
-    const { name, adminId, password, maxUsers, isPrivate } = JSON.parse(
-        event.body,
-    );
+    const { body } = event;
+    const { roomName, adminId, maxUsers, isPrivate, password } =
+        JSON.parse(body);
 
-    const roomId = v4();
-
-    const newRoom = {
-        PK: `ROOM#${roomId}`,
-        SK: 'CONFIG',
-        entity: 'Room',
-        name,
-        maxUsers,
-        isPrivate,
-        adminId,
-        createdAt: Date.now(),
-        password: isPrivate ? bcrypt.hashSync(password, 10) : undefined,
-    };
-
-    const putCommand = new PutCommand({
+    const scanCommand = new ScanCommand({
         TableName: DUOCHAT_TABLE,
-        Item: newRoom,
-        ConditionExpression: 'attribute_not_exists(name)',
+        FilterExpression: '#roomName = :roomName',
+        ExpressionAttributeNames: {
+            '#roomName': 'roomName',
+        },
+        ExpressionAttributeValues: {
+            ':roomName': roomName,
+        },
     });
 
+    const { Items } = await ddbDocClient.send(scanCommand);
+
+    if (Items.length) {
+        return new ResponseModel({
+            statusCode: 400,
+            message: 'Already exists a room with the specified name',
+        });
+    }
+
     try {
+        const roomId = v4();
+
+        const newRoom = {
+            PK: `ROOM#${roomId}`,
+            SK: 'CONFIG',
+            entity: 'Room',
+            roomName,
+            adminId,
+            maxUsers,
+            isPrivate,
+            password,
+            createdAt: Date.now(),
+        };
+
+        const putCommand = new PutCommand({
+            TableName: DUOCHAT_TABLE,
+            Item: newRoom,
+        });
+
         await ddbDocClient.send(putCommand);
+
         return new ResponseModel({
             statusCode: 201,
             message: 'Room created successfully',
+            data: newRoom,
         });
     } catch (error) {
-        if (error.name === 'ConditionalCheckFailedException') {
-            return new ResponseModel({
-                statusCode: 400,
-                message: 'Already exists a room with the specified name',
-            });
-        }
         return new ResponseModel();
     }
 };

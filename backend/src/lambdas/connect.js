@@ -9,11 +9,11 @@ const client = new DynamoDBClient({ region: AWS_REGION });
 const ddbDocClient = DynamoDBDocumentClient.from(client);
 
 exports.handler = async event => {
-    const { connectionId, domainName, body, channel } = event.requestContext;
+    const { connectionId, body } = event.requestContext;
     const { userName, avatar } = JSON.parse(body);
 
-    const PK = `USER#${connectionId}`;
-    const SK = channel ? `ROOM#${channel}` : 'LOBBY';
+    const PK = `USER#${v4()}`;
+    const SK = 'LOBBY';
 
     const user = {
         PK,
@@ -24,13 +24,13 @@ exports.handler = async event => {
         connectionId,
         userName,
         avatar,
-        domainName,
         createdAt: Date.now(),
     };
 
     const putCommand = new PutCommand({
         TableName: DUOCHAT_TABLE,
         Item: user,
+        ConditionExpression: 'attribute_not_exists(userName)',
     });
 
     try {
@@ -40,6 +40,13 @@ exports.handler = async event => {
             message: 'User connected successfully',
         });
     } catch (error) {
+        if (error.name === 'ConditionalCheckFailedException') {
+            return new ResponseModel({
+                statusCode: 400,
+                message: 'Username already in use',
+                data: error,
+            });
+        }
         return new ResponseModel({ data: error });
     }
 };

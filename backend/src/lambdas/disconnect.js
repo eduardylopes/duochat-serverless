@@ -13,12 +13,13 @@ const client = new DynamoDBClient({ region: AWS_REGION });
 const ddbDocClient = DynamoDBDocumentClient.from(client);
 
 exports.handler = async event => {
-    const { connectionId, domainName, stage } = event.requestContext;
+    const { userId, roomId } = JSON.parse(event.body);
 
     const deleteCommand = new DeleteCommand({
         TableName: DUOCHAT_TABLE,
         Key: {
-            id: connectionId,
+            PK: userId,
+            SK: roomId,
         },
     });
 
@@ -29,12 +30,11 @@ exports.handler = async event => {
             message: 'User disconnected',
         });
 
-        await postToConnection(domainName, stage, connectionId, response);
-
         return response;
     } catch (error) {
         const errorResponse = new ResponseModel({
             message: 'Failed to disconnect user',
+            date: error,
         });
 
         return errorResponse;
