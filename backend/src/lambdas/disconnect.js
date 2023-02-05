@@ -1,30 +1,16 @@
-const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
-const {
-    DeleteCommand,
-    DynamoDBDocumentClient,
-} = require('@aws-sdk/lib-dynamodb');
-const { postToConnection } = require('../utils/api-gateway-management');
 const { ResponseModel } = require('../utils/response-model');
-
-const { DUOCHAT_TABLE, AWS_REGION } = process.env;
-
-const client = new DynamoDBClient({ region: AWS_REGION });
-
-const ddbDocClient = DynamoDBDocumentClient.from(client);
+const mongoose = require('mongoose');
+const Room = require('../schemas/room-schema');
 
 exports.handler = async event => {
+    await mongoose.connect(process.env.MONGODB_URI);
     const { userId, roomId } = JSON.parse(event.body);
 
-    const deleteCommand = new DeleteCommand({
-        TableName: DUOCHAT_TABLE,
-        Key: {
-            PK: userId,
-            SK: roomId,
-        },
-    });
-
     try {
-        await ddbDocClient.send(deleteCommand);
+        const room = await Room.findById(roomId);
+        room.users = room.users.filter(user => user.id !== userId);
+        room.save();
+
         const response = new ResponseModel({
             statusCode: 200,
             message: 'User disconnected',
@@ -38,5 +24,7 @@ exports.handler = async event => {
         });
 
         return errorResponse;
+    } finally {
+        await mongoose.connection.close();
     }
 };

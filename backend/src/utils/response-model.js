@@ -7,7 +7,15 @@ class ResponseModel {
             message,
         };
 
-        if (data) Object.assign(body, { data });
+        if (data) {
+            for (const key in data) {
+                if (data[key] === undefined) {
+                    delete data[key];
+                }
+            }
+
+            Object.assign(body, { data });
+        }
 
         this.body = JSON.stringify(body);
 

@@ -1,13 +1,12 @@
 const {
     ApiGatewayManagementApiClient,
     PostToConnectionCommand,
-    DeleteConnectionCommand,
 } = require('@aws-sdk/client-apigatewaymanagementapi');
 
-const { AWS_REGION } = process.env;
-
 const sendToOne = async (connectionId, payload) => {
-    const client = new ApiGatewayManagementApiClient({ region: AWS_REGION });
+    const client = new ApiGatewayManagementApiClient({
+        region: process.env.AWS_REGION,
+    });
 
     const postToConnectionCommand = await PostToConnectionCommand({
         connectionId,

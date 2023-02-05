@@ -14,8 +14,7 @@
     "author": "Eduardy Lopes",
     "dependencies": {
         "@aws-sdk/client-apigatewaymanagementapi": "^3.254.0",
-        "@aws-sdk/client-dynamodb": "^3.254.0",
-        "@aws-sdk/lib-dynamodb": "^3.254.0",
+        "mongoose": "^6.9.0",
         "uuid": "^9.0.0"
     },
     "devDependencies": {
@@ -25,7 +24,7 @@
         "eslint-plugin-import": "^2.27.5",
         "nodemon": "^2.0.20",
         "prettier": "^2.8.3",
-        "serverless-dynamodb-local": "^0.2.40",
+        "serverless-dotenv-plugin": "^4.0.2",
         "serverless-offline": "^12.0.4"
     }
 }
