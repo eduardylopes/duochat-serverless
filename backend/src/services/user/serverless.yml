@@ -1,0 +1,44 @@
+functions:
+    createUser:
+        handler: src/services/user/lambdas/create-user.handler
+        events:
+            - http:
+                  path: /user
+                  method: POST
+                  cors: true
+                  request:
+                      schemas:
+                          application/json:
+                              schema: models/create-user-model.json
+                              name: CreateUserModel
+    updateUser:
+        handler: src/services/user/lambdas/update-user.handler
+        events:
+            - http:
+                  path: /user
+                  method: PUT
+                  cors: true
+                  request:
+                      schemas:
+                          application/json:
+                              schema: models/update-user-model.json
+                              name: UpdateUserModel
+    listUser:
+        handler: src/services/user/lambdas/list-user.handler
+        events:
+            - http:
+                  path: /user
+                  method: GET
+                  cors: true
+    deleteUser:
+        handler: src/services/user/lambdas/delete-user.handler
+        events:
+            - http:
+                  path: /user
+                  method: DELETE
+                  cors: true
+                  request:
+                      schemas:
+                          application/json:
+                              schema: models/delete-user-model.json
+                              name: DeleteUserModel

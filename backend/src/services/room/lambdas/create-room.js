@@ -1,12 +1,13 @@
-const { ResponseModel } = require('../utils/response-model');
+const { ResponseModel } = require('../../../utils/response-model');
 const mongoose = require('mongoose');
 const Room = require('../schemas/room-schema');
 
-exports.handler = async event => {
-    await mongoose.connect(process.env.MONGODB_URI);
+mongoose.connect(process.env.MONGODB_URI);
 
-    const { body } = event;
-    const { name, adminId, maxUsers, isPrivate, password } = JSON.parse(body);
+exports.handler = async event => {
+    const { name, adminId, maxUsers, isPrivate, password } = JSON.parse(
+        event.body,
+    );
 
     try {
         const room = new Room({ name, adminId, maxUsers, isPrivate, password });
@@ -18,8 +19,12 @@ exports.handler = async event => {
             data: savedRoom,
         });
     } catch (error) {
+        if (error.code === 11000) {
+            return new ResponseModel({
+                statusCode: 400,
+                message: 'Room name already in use',
+            });
+        }
         return new ResponseModel({ data: error });
-    } finally {
-        await mongoose.connection.close();
     }
 };

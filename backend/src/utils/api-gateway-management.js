@@ -3,14 +3,14 @@ const {
     PostToConnectionCommand,
 } = require('@aws-sdk/client-apigatewaymanagementapi');
 
-const sendToOne = async (connectionId, payload) => {
+const sendToOne = async (connectionId, payload, endpoint) => {
     const client = new ApiGatewayManagementApiClient({
-        region: process.env.AWS_REGION,
+        endpoint,
     });
 
-    const postToConnectionCommand = await PostToConnectionCommand({
-        connectionId,
+    const postToConnectionCommand = new PostToConnectionCommand({
         Data: Buffer.from(JSON.stringify(payload)),
+        ConnectionId: connectionId,
     });
 
     const response = await client.send(postToConnectionCommand);

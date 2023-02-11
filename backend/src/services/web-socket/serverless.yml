@@ -1,0 +1,21 @@
+functions:
+    connect:
+        handler: src/services/web-socket/lambdas/connect.handler
+        events:
+            - websocket:
+                  route: $connect
+    disconnect:
+        handler: src/services/web-socket/lambdas/disconnect.handler
+        events:
+            - websocket:
+                  route: $disconnect
+    default:
+        handler: src/services/web-socket/lambdas/default.handler
+        events:
+            - websocket:
+                  route: $default
+    subscribe:
+        handler: src/services/web-socket/lambdas/subscribe.handler
+        events:
+            - websocket:
+                  route: subscribe

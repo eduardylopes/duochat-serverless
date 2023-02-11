@@ -1,0 +1,44 @@
+functions:
+    createRoom:
+        handler: src/services/room/lambdas/create-room.handler
+        events:
+            - http:
+                  path: /room
+                  method: POST
+                  cors: true
+                  request:
+                      schemas:
+                          application/json:
+                              schema: models/create-room-model.json
+                              name: CreateRoomModel
+    updateRoom:
+        handler: src/services/room/lambdas/update-room.handler
+        events:
+            - http:
+                  path: /room
+                  method: PUT
+                  cors: true
+                  request:
+                      schemas:
+                          application/json:
+                              schema: models/update-room-model.json
+                              name: UpdateRoomModel
+    listRoom:
+        handler: src/services/room/lambdas/list-room.handler
+        events:
+            - http:
+                  path: /room
+                  method: GET
+                  cors: true
+    deleteRoom:
+        handler: src/services/room/lambdas/delete-room.handler
+        events:
+            - http:
+                  path: /room
+                  method: DELETE
+                  cors: true
+                  request:
+                      schemas:
+                          application/json:
+                              schema: models/delete-room-model.json
+                              name: DeleteRoomModel

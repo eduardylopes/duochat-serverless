@@ -1,0 +1,44 @@
+functions:
+    createLobby:
+        handler: src/services/lobby/lambdas/create-lobby.handler
+        events:
+            - http:
+                  path: /lobby
+                  method: POST
+                  cors: true
+                  request:
+                      schemas:
+                          application/json:
+                              schema: src/services/lobby/models/create-lobby-model.json
+                              name: CreateLobbyModel
+    updateLobby:
+        handler: src/services/lobby/lambdas/update-lobby.handler
+        events:
+            - http:
+                  path: /lobby
+                  method: PUT
+                  cors: true
+                  request:
+                      schemas:
+                          application/json:
+                              schema: src/services/lobby/models/update-lobby-model.json
+                              name: UpdateLobbyModel
+    listLobby:
+        handler: src/services/lobby/lambdas/list-lobby.handler
+        events:
+            - http:
+                  path: /lobby
+                  method: GET
+                  cors: true
+    deleteLobby:
+        handler: src/services/lobby/lambdas/delete-lobby.handler
+        events:
+            - http:
+                  path: /lobby
+                  method: DELETE
+                  cors: true
+                  request:
+                      schemas:
+                          application/json:
+                              schema: src/services/lobby/models/delete-lobby-model.json
+                              name: DeleteLobbyModel

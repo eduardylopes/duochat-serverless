@@ -1,7 +1,9 @@
 const { ResponseModel } = require('../utils/response-model');
 const { postToConnection } = require('../utils/api-gateway-management');
 
-exports.handler = async (connectionId, domainName, stage) => {
+exports.handler = async event => {
+    console.log(event);
+
     try {
         const response = new ResponseModel({
             status: 404,

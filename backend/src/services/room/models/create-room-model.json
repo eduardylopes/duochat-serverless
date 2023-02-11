@@ -1,0 +1,14 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "additionalProperties": false,
+    "title": "Create Room Model",
+    "type": "object",
+    "properties": {
+        "maxUsers": { "type": "number", "minimum": 1 },
+        "password": { "type": "string" },
+        "adminId": { "type": "string" },
+        "isPrivate": { "type": "boolean" },
+        "name": { "type": "string" }
+    },
+    "required": ["name", "adminId", "isPrivate", "maxUsers"]
+}

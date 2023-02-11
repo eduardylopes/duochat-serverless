@@ -1,0 +1,12 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "additionalProperties": false,
+    "title": "Create User Model",
+    "type": "object",
+    "properties": {
+        "userName": { "type": "number", "minLength": 3, "maxLength": 10 },
+        "avatar": { "type": "string" },
+        "connectionId": { "type": "string" }
+    },
+    "required": ["userName", "avatar", "connectionId"]
+}

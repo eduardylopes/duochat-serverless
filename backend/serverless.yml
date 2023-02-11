@@ -11,8 +11,8 @@ plugins:
 provider:
     name: aws
     runtime: nodejs16.x
-    region: us-east-1
-    stage: develop
+    region: ${self:custom.region}
+    stage: ${self:custom.stage}
     websocketsApiName: ${self:custom.projectName}
     websocketsApiRouteSelectionExpression: $request.body.route
     logs:
@@ -23,56 +23,18 @@ provider:
     iamRoleStatements:
         - Effect: Allow
           Action:
-              - dynamodb:*
               - cloudwatch:*
           Resource: '*'
 
-    environment:
-        AWS_APPLICATION_REGION: 'sa-east-1'
+functions:
+    - ${file(src/services/lobby/serverless.yml):functions}
+    - ${file(src/services/user/serverless.yml):functions}
+    - ${file(src/services/room/serverless.yml):functions}
+    - ${file(src/services/web-socket/serverless.yml):functions}
 
 custom:
     projectName: duochat
+    region: us-east-1
+    stage: develop
     dotenv:
         path: .env
-
-functions:
-    connect:
-        handler: src/lambdas/connect.handler
-        events:
-            - websocket:
-                  route: $connect
-    disconnect:
-        handler: src/lambdas/disconnect.handler
-        events:
-            - websocket:
-                  route: $disconnect
-    default:
-        handler: src/lambdas/default.handler
-        events:
-            - websocket:
-                  route: $default
-
-    createRoom:
-        handler: src/lambdas/create-room.handler
-        events:
-            - http:
-                  path: /room
-                  method: POST
-                  cors: true
-                  request:
-                      schemas:
-                          application/json:
-                              schema: ${file(src/models/create-room-model.json)}
-                              name: CreateRoomModel
-    updateRoom:
-        handler: src/lambdas/update-room.handler
-        events:
-            - http:
-                  path: /room
-                  method: PUT
-                  cors: true
-                  request:
-                      schemas:
-                          application/json:
-                              schema: ${file(src/models/update-room-model.json)}
-                              name: UpdateRoomModel

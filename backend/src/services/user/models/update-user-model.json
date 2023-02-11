@@ -1,0 +1,12 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "additionalProperties": false,
+    "title": "Update User Model",
+    "type": "object",
+    "properties": {
+        "id": { "type": "string" },
+        "userName": { "type": "number", "minLength": 3, "maxLength": 10 },
+        "avatar": { "type": "string" }
+    },
+    "required": ["id"]
+}
