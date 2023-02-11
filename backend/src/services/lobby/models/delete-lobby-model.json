@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "additionalProperties": false,
-    "title": "Delete Room Model",
+    "title": "Delete Lobby Model",
     "type": "object",
     "properties": {
         "id": { "type": "string" }

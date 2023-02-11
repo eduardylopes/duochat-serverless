@@ -1,15 +1,11 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "additionalProperties": false,
-    "title": "Update Room Model",
+    "title": "Delete Lobby Model",
     "type": "object",
     "properties": {
         "id": { "type": "string" },
-        "maxUsers": { "type": "number" },
-        "password": { "type": "string" },
-        "adminId": { "type": "string" },
-        "isPrivate": { "type": "boolean" },
         "name": { "type": "string" }
     },
-    "required": ["id", "adminId"]
+    "required": ["id", "name"]
 }

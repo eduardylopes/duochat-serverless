@@ -9,7 +9,7 @@ functions:
                   request:
                       schemas:
                           application/json:
-                              schema: models/create-user-model.json
+                              schema: ${file:(src/services/user/models/create-user-model.json)}
                               name: CreateUserModel
     updateUser:
         handler: src/services/user/lambdas/update-user.handler
@@ -21,7 +21,7 @@ functions:
                   request:
                       schemas:
                           application/json:
-                              schema: models/update-user-model.json
+                              schema: ${file:(src/services/user/models/update-user-model.json)}
                               name: UpdateUserModel
     listUser:
         handler: src/services/user/lambdas/list-user.handler
@@ -40,5 +40,5 @@ functions:
                   request:
                       schemas:
                           application/json:
-                              schema: models/delete-user-model.json
+                              schema: ${file:(src/services/user/models/delete-user-model.json)}
                               name: DeleteUserModel

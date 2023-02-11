@@ -9,7 +9,7 @@ functions:
                   request:
                       schemas:
                           application/json:
-                              schema: models/create-room-model.json
+                              schema: ${file:(src/services/room/models/create-room-model.json)}
                               name: CreateRoomModel
     updateRoom:
         handler: src/services/room/lambdas/update-room.handler
@@ -21,7 +21,7 @@ functions:
                   request:
                       schemas:
                           application/json:
-                              schema: models/update-room-model.json
+                              schema: ${file:(src/services/room/models/update-room-model.json)}
                               name: UpdateRoomModel
     listRoom:
         handler: src/services/room/lambdas/list-room.handler
@@ -40,5 +40,5 @@ functions:
                   request:
                       schemas:
                           application/json:
-                              schema: models/delete-room-model.json
+                              schema: ${file:(src/services/room/models/delete-room-model.json)}
                               name: DeleteRoomModel
