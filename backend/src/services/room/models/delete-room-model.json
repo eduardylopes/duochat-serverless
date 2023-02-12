@@ -5,7 +5,7 @@
     "type": "object",
     "properties": {
         "id": { "type": "string" },
-        "userId": { "type": "string"}
+        "userId": { "type": "string" }
     },
     "required": ["id", "userId"]
 }

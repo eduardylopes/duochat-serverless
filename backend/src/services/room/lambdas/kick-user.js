@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const Room = require('../schemas/room-schema');
 const Lobby = require('../../lobby/schemas/lobby-schema');
 const User = require('../../user/schemas/user-schema');
+const Message = require('../../message/schemas/message-schema');
 const {
     deleteConnection,
     sendToMultiple,
@@ -23,7 +24,9 @@ exports.handler = async event => {
             { _id: roomId, adminId },
             { $pull: { users: userId } },
             { new: true },
-        );
+        )
+            .populate({ path: 'users', model: User })
+            .populate({ path: 'messages', model: Message });
 
         if (!updatedRoom)
             throw new AppError(
@@ -31,31 +34,31 @@ exports.handler = async event => {
                 404,
             );
 
-        const roomConnectionIds = updatedLobby.users.map(
-            user => user.connectionId,
-        );
+        // await deleteConnection(user.connectionId);
 
-        await sendToMultiple(roomConnectionIds, updatedRoom);
+        // const roomConnectionIds = updatedLobby.users.map(
+        //     user => user.connectionId,
+        // );
+        // await sendToMultiple(roomConnectionIds, updatedRoom);
 
         const updatedLobby = await Lobby.findOne({ rooms: id })
             .populate({
                 path: 'rooms',
+                model: Room,
                 populate: {
                     path: 'users',
+                    mode: User,
                 },
             })
-            .populate('users');
+            .populate({ path: 'users', model: User });
 
-        const lobbyConnectionIds = updatedLobby.users.map(
-            user => user.connectionId,
-        );
-
-        await sendToMultiple(lobbyConnectionIds, updatedLobby);
-
-        await deleteConnection(user.connectionId);
+        // const lobbyConnectionIds = updatedLobby.users.map(
+        //     user => user.connectionId,
+        // );
+        // await sendToMultiple(lobbyConnectionIds, updatedLobby);
 
         return new ResponseModel({
-            statusCode: 204,
+            statusCode: 200,
             message: 'User kicked successfully',
         });
     } catch (error) {

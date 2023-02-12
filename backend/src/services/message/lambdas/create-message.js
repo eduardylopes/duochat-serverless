@@ -30,11 +30,12 @@ exports.handler = async event => {
             roomId,
             { $push: { messages: savedMessage._id } },
             { new: true },
-        ).populate(['users', 'messages']);
+        )
+            .populate({ path: 'users', model: User })
+            .populate({ path: 'messages', model: Message });
 
-        const connectionIds = updatedRoom.users.map(user => user.connectionId);
-
-        await sendToMultiple(connectionIds, updatedRoom);
+        // const connectionIds = updatedRoom.users.map(user => user.connectionId);
+        // await sendToMultiple(connectionIds, updatedRoom);
 
         return new ResponseModel({
             statusCode: 201,

@@ -4,12 +4,12 @@
     "title": "Create Room Model",
     "type": "object",
     "properties": {
-        "maxUsers": { "type": "number", "minimum": 1 },
-        "lobbyId": { "type": "string"},
+        "name": { "type": "string" },
+        "maxUsers": { "type": "number", "minimum": 1, "maximum": 50 },
+        "isPrivate": { "type": "boolean" },
         "password": { "type": "string" },
         "adminId": { "type": "string" },
-        "isPrivate": { "type": "boolean" },
-        "name": { "type": "string" }
+        "lobbyId": { "type": "string" }
     },
     "required": ["name", "adminId", "isPrivate", "maxUsers", "lobbyId"]
 }

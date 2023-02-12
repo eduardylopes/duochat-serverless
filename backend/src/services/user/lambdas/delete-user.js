@@ -1,5 +1,5 @@
 const ResponseModel = require('../../../utils/response-model');
-const AppError = require('../../utils/app-error');
+const AppError = require('../../../utils/app-error');
 const mongoose = require('mongoose');
 const User = require('../schemas/user-schema');
 
@@ -14,9 +14,8 @@ exports.handler = async event => {
         if (!user) throw new AppError('User not found', 404);
 
         return new ResponseModel({
-            statusCode: 204,
+            statusCode: 200,
             message: 'User deleted successfully',
-            data: user,
         });
     } catch (error) {
         if (error instanceof AppError) {

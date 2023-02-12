@@ -3,11 +3,13 @@ const AppError = require('../../../utils/app-error');
 const mongoose = require('mongoose');
 const Room = require('../schemas/room-schema');
 const Lobby = require('../../lobby/schemas/lobby-schema');
+const User = require('../../user/schemas/user-schema');
 const {
     deleteConnection,
     sendToMultiple,
 } = require('../../../utils/api-gateway-management');
 
+mongoose.set('strictQuery', false);
 mongoose.connect(process.env.MONGODB_URI);
 
 exports.handler = async event => {
@@ -25,31 +27,33 @@ exports.handler = async event => {
                 404,
             );
 
-        const updatedLobby = await Lobby.updateOne(
+        const updatedLobby = await Lobby.findOneAndUpdate(
             { rooms: id },
             { $pull: { rooms: id } },
             { new: true },
         )
             .populate({
                 path: 'rooms',
+                model: Room,
                 populate: {
                     path: 'users',
+                    model: User,
                 },
             })
-            .populate('users');
+            .populate({ path: 'users', model: User });
 
-        const connectionIds = updatedLobby.users.map(user => user.connectionId);
+        // const removeUsersConnected = deletedRoom.users.map(connectionId =>
+        //     deleteConnection(connectionId),
+        // );
+        // await Promise.all(removeUsersConnected);
 
-        await sendToMultiple(connectionIds, updatedRoom);
-
-        const removeUsersConnected = connectionIds.map(connectionId =>
-            deleteConnection(connectionId),
-        );
-
-        await Promise.all(removeUsersConnected);
+        // const lobbyConnectionIds = updatedLobby.users.map(
+        //     user => user.connectionId,
+        // );
+        // await sendToMultiple(lobbyConnectionIds, updatedLobby);
 
         return new ResponseModel({
-            statusCode: 204,
+            statusCode: 200,
             message: 'Room deleted successfully',
         });
     } catch (error) {

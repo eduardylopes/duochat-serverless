@@ -14,8 +14,13 @@ functions:
         events:
             - websocket:
                   route: $default
-    subscribe:
-        handler: src/services/web-socket/lambdas/subscribe.handler
+    joinRoom:
+        handler: src/services/web-socket/lambdas/join-room.handler
         events:
             - websocket:
-                  route: subscribe
+                  route: joinRoom
+    joinLobby:
+        handler: src/services/web-socket/lambdas/join-lobby.handler
+        events:
+            - websocket:
+                  route: joinLobby

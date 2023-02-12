@@ -4,6 +4,7 @@ const AppError = require('../../../utils/app-error');
 const mongoose = require('mongoose');
 const Message = require('../../message/schemas/message-schema');
 const Room = require('../../room/schemas/room-schema');
+const User = require('../../user/schemas/user-schema');
 
 mongoose.connect(process.env.MONGODB_URI);
 
@@ -22,18 +23,19 @@ exports.handler = async event => {
                 404,
             );
 
-        const updatedRoom = await Room.updateOne(
+        const updatedRoom = await Room.findOneAndUpdate(
             { messages: id },
             { $pull: { messages: id } },
             { new: true },
-        ).populate(['messages', 'users']);
+        )
+            .populate({ path: 'users', model: User })
+            .populate({ path: 'messages', model: Message });
 
-        const connectionIds = updatedRoom.users.map(user => user.connectionId);
-
-        await sendToMultiple(connectionIds, updatedRoom);
+        // const connectionIds = updatedRoom.users.map(user => user.connectionId);
+        // await sendToMultiple(connectionIds, updatedRoom);
 
         return new ResponseModel({
-            statusCode: 204,
+            statusCode: 200,
             message: 'Message deleted successfully',
         });
     } catch (error) {

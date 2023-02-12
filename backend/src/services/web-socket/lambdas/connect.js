@@ -1,3 +1,1 @@
-exports.handler = async event => {
-    return {};
-};
+exports.handler = async () => null;

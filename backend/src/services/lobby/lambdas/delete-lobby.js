@@ -1,5 +1,5 @@
 const ResponseModel = require('../../../utils/response-model');
-const AppError = require('../../utils/app-error');
+const AppError = require('../../../utils/app-error');
 const mongoose = require('mongoose');
 const Lobby = require('../schemas/lobby-schema');
 
@@ -14,7 +14,7 @@ exports.handler = async event => {
         if (!lobby) throw new AppError('Lobby not found', 404);
 
         return new ResponseModel({
-            statusCode: 204,
+            statusCode: 200,
             message: 'Lobby deleted successfully',
         });
     } catch (error) {
