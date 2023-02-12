@@ -1,15 +1,15 @@
-const ResponseModel = require('../../../utils/response-model');
-const AppError = require('../../../utils/app-error');
-const mongoose = require('mongoose');
-const Lobby = require('../schemas/lobby-schema');
+import mongoose from 'mongoose';
+import AppError from '../../../utils/app-error.js';
+import ResponseModel from '../../../utils/response-model.js';
+import { findByIdAndDelete } from '../schemas/lobby-schema.js';
 
 mongoose.connect(process.env.MONGODB_URI);
 
-exports.handler = async event => {
+export const handler = async event => {
     const { id } = JSON.parse(event.body);
 
     try {
-        const lobby = await Lobby.findByIdAndDelete(id);
+        const lobby = await findByIdAndDelete(id);
 
         if (!lobby) throw new AppError('Lobby not found', 404);
 

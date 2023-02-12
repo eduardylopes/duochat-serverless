@@ -1,11 +1,11 @@
-const ResponseModel = require('../../../utils/response-model');
-const AppError = require('../../../utils/app-error');
-const mongoose = require('mongoose');
-const User = require('../schemas/user-schema');
+import mongoose from 'mongoose';
+import { AppError } from '../../../utils/app-error.js';
+import { ResponseModel } from '../../../utils/response-model.js';
+import { User } from '../schemas/user-schema.js';
 
 mongoose.connect(process.env.MONGODB_URI);
 
-exports.handler = async event => {
+export const handler = async event => {
     const { id } = JSON.parse(event.body);
 
     try {

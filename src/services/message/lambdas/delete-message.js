@@ -1,14 +1,14 @@
-const ResponseModel = require('../../../utils/response-model');
-const { sendToMultiple } = require('../../../utils/api-gateway-management');
-const AppError = require('../../../utils/app-error');
-const mongoose = require('mongoose');
-const Message = require('../../message/schemas/message-schema');
-const Room = require('../../room/schemas/room-schema');
-const User = require('../../user/schemas/user-schema');
+import mongoose from 'mongoose';
+import { sendToMultiple } from '../../../utils/api-gateway-management.js';
+import { AppError } from '../../../utils/app-error.js';
+import { ResponseModel } from '../../../utils/response-model.js';
+import { Message } from '../../message/schemas/message-schema.js';
+import { Room } from '../../room/schemas/room-schema.js';
+import { User } from '../../user/schemas/user-schema.js';
 
 mongoose.connect(process.env.MONGODB_URI);
 
-exports.handler = async event => {
+export const handler = async event => {
     const { id, userId } = JSON.parse(event.body);
 
     try {

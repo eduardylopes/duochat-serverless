@@ -1,16 +1,17 @@
-const { sendToMultiple } = require('../../../utils/api-gateway-management');
-const User = require('../../user/schemas/user-schema');
-const Message = require('../../message/schemas/message-schema');
-const Room = require('../../room/schemas/room-schema');
-const Lobby = require('../../lobby/schemas/lobby-schema');
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
+import { sendToMultiple } from '../../../utils/api-gateway-management.js';
+import { ResponseModel } from '../../../utils/response-model.js';
+import { Lobby } from '../../lobby/schemas/lobby-schema.js';
+import { Message } from '../../message/schemas/message-schema.js';
+import { Room } from '../../room/schemas/room-schema.js';
+import { User } from '../../user/schemas/user-schema.js';
 
 mongoose.connect(process.env.MONGODB_URI);
 
-exports.handler = async event => {
+export const handler = async event => {
     const { connectionId } = event.requestContext;
 
-    await User.findOneAndDelete({ connectionId });
+    await findOneAndDelete({ connectionId });
 
     const updatedRoom = await Room.findOneAndUpdate(
         { users: { $elemMatch: { connectionId } } },
@@ -36,4 +37,9 @@ exports.handler = async event => {
 
     const lobbyConnectionIds = lobby.users.map(user => user.connectionId);
     await sendToMultiple(lobbyConnectionIds, lobby);
+
+    return new ResponseModel({
+        statusCode: 200,
+        message: 'User disconnected successfully',
+    });
 };
