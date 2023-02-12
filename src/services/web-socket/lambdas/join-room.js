@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
-const { sendToMultiple } = require('../../../utils/api-gateway-management');
-const { ResponseModel } = require('../../../utils/response-model');
+const {
+    sendToMultiple,
+    sendToOne,
+} = require('../../../utils/api-gateway-management');
 const { Lobby } = require('../../lobby/schemas/lobby-schema');
 const { Message } = require('../../message/schemas/message-schema');
 const { Room } = require('../../room/schemas/room-schema');
@@ -15,10 +17,7 @@ exports.handler = async event => {
     const user = await User.findOne({ connectionId });
 
     if (!user) {
-        return new ResponseModel({
-            statusCode: 404,
-            message: 'User not found',
-        });
+        await sendToOne(connectionId, 'User not found');
     }
 
     const room = await Room.findById(id).populate({

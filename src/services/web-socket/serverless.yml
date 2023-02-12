@@ -14,6 +14,11 @@ functions:
         events:
             - websocket:
                   route: $default
+    getConnectionId:
+        handler: src/services/web-socket/lambdas/get-connection-id.handler
+        events:
+            - websocket:
+                  route: getConnectionId
     joinRoom:
         handler: src/services/web-socket/lambdas/join-room.handler
         events:

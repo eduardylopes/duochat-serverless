@@ -17,7 +17,6 @@ exports.handler = async event => {
             data: savedUser,
         });
     } catch (error) {
-        console.log('error', error);
         if (error.code === 11000) {
             return new ResponseModel({
                 statusCode: 400,

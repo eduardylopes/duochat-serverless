@@ -6,15 +6,13 @@
         "sls:deploy": "serverless deploy",
         "sls deploy": "serverless deploy",
         "start": "nodemon --exec serverless offline",
-        "db": "serverless dynamodb start",
         "prettier": "npx prettier --write --ignore-unknown .",
         "eslint": "npx eslint --fix src --ext .js"
     },
     "author": "Eduardy Lopes",
     "dependencies": {
-        "@aws-sdk/client-apigatewaymanagementapi": "^3.254.0",
-        "mongoose": "^6.9.0",
-        "uuid": "^9.0.0"
+        "@aws-sdk/client-apigatewaymanagementapi": "^3.267.0",
+        "mongoose": "^6.9.0"
     },
     "devDependencies": {
         "eslint": "^8.32.0",

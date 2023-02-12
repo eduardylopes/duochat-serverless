@@ -11,7 +11,7 @@ mongoose.connect(process.env.MONGODB_URI);
 exports.handler = async event => {
     const { connectionId } = event.requestContext;
 
-    await findOneAndDelete({ connectionId });
+    await User.findOneAndDelete({ connectionId });
 
     const updatedRoom = await Room.findOneAndUpdate(
         { users: { $elemMatch: { connectionId } } },
