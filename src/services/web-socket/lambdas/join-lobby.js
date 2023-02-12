@@ -21,7 +21,7 @@ exports.handler = async event => {
 
     const updatedLobby = await Lobby.findByIdAndUpdate(
         id,
-        { $push: { users: user._id } },
+        { $addToSet: { users: user._id } },
         { new: true },
     )
         .populate({

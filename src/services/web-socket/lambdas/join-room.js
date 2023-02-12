@@ -40,16 +40,14 @@ exports.handler = async event => {
 
     const updatedRoom = await Room.findByIdAndUpdate(
         id,
-        { $push: { users: user._id } },
+        { $addToSet: { users: user._id } },
         { new: true },
     )
         .populate({ path: 'users', model: User })
         .populate({ path: 'messages', model: Message });
 
-    console.log('updatedRoom', updatedRoom);
-
     const roomConnectionIds = updatedRoom.users.map(user => user.connectionId);
-    await sendToMultiple(roomConnectionIds, room);
+    await sendToMultiple(roomConnectionIds, updatedRoom);
 
     const lobby = await Lobby.findOne({ rooms: room._id })
         .populate({
