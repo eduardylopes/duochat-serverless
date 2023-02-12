@@ -1,18 +1,17 @@
 const mongoose = require('mongoose');
 import {
     deleteConnection,
-    sendToMultiple
+    sendToMultiple,
 } from '../../../utils/api-gateway-management';
-);
-const { AppError} = require( '../../../utils/app-error');
-const { ResponseModel} = require( '../../../utils/response-model');
-const { Message} = require( '../../message/schemas/message-schema');
-const { User} = require( '../../user/schemas/user-schema');
-const { Room} = require( '../schemas/room-schema');
+const { AppError } = require('../../../utils/app-error');
+const { ResponseModel } = require('../../../utils/response-model');
+const { Message } = require('../../message/schemas/message-schema');
+const { User } = require('../../user/schemas/user-schema');
+const { Room } = require('../schemas/room-schema');
 
 mongoose.connect(process.env.MONGODB_URI);
 
-exports.handler = async event =>  {
+exports.handler = async event => {
     const { roomId, userId, adminId } = JSON.parse(event.body);
 
     try {

@@ -4,7 +4,7 @@ const { Lobby } = require('../schemas/lobby-schema');
 
 mongoose.connect(process.env.MONGODB_URI);
 
-const handler = async () => {
+exports.handler = async () => {
     try {
         const lobbies = await Lobby.find();
 

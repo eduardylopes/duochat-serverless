@@ -1,8 +1,8 @@
-import {
+const {
     ApiGatewayManagementApiClient,
     DeleteConnectionCommand,
     PostToConnectionCommand,
-} from '@aws-sdk/client-apigatewaymanagementapi';
+} = require('@aws-sdk/client-apigatewaymanagementapi');
 
 const sendToOne = async (connectionId, payload) => {
     const client = new ApiGatewayManagementApiClient({
