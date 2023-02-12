@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
-import {
+const {
     deleteConnection,
     sendToMultiple,
-} from '../../../utils/api-gateway-management';
+} = require('../../../utils/api-gateway-management');
 const { AppError } = require('../../../utils/app-error');
 const { ResponseModel } = require('../../../utils/response-model');
 const { Lobby } = require('../../lobby/schemas/lobby-schema');

@@ -36,4 +36,6 @@ exports.handler = async event => {
 
     const connectionIds = updatedLobby.users.map(user => user.connectionId);
     await sendToMultiple(connectionIds, updatedLobby);
+
+    return {};
 };

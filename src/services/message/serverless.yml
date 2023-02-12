@@ -3,7 +3,7 @@ functions:
         handler: src/services/user/lambdas/create-user.handler
         events:
             - http:
-                  path: /user
+                  path: /message
                   method: POST
                   cors: true
                   request:
@@ -15,7 +15,7 @@ functions:
         handler: src/services/user/lambdas/update-user.handler
         events:
             - http:
-                  path: /user
+                  path: /message
                   method: PUT
                   cors: true
                   request:
@@ -27,7 +27,7 @@ functions:
         handler: src/services/user/lambdas/list-user.handler
         events:
             - http:
-                  path: /user
+                  path: /message
                   method: GET
                   cors: true
 
@@ -35,7 +35,7 @@ functions:
         handler: src/services/user/lambdas/delete-user.handler
         events:
             - http:
-                  path: /user
+                  path: /message
                   method: DELETE
                   cors: true
                   request:

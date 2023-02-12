@@ -38,8 +38,5 @@ exports.handler = async event => {
     const lobbyConnectionIds = lobby.users.map(user => user.connectionId);
     await sendToMultiple(lobbyConnectionIds, lobby);
 
-    return new ResponseModel({
-        statusCode: 200,
-        message: 'User disconnected successfully',
-    });
+    return {};
 };

@@ -34,9 +34,11 @@ exports.handler = async event => {
         if (!isPasswordCorrect) throw new AppError('Invalid password', 400);
     }
 
-    room.users.push(user._id);
-    const updatedRoom = await room
-        .save()
+    const updatedRoom = await Room.findByIdAndUpdate(
+        id,
+        { $push: { users: user._id } },
+        { new: true },
+    )
         .populate({ path: 'users', model: User })
         .populate({ path: 'messages', model: Message });
 
@@ -56,4 +58,6 @@ exports.handler = async event => {
 
     const lobbyConnectionIds = lobby.users.map(user => user.connectionId);
     await sendToMultiple(lobbyConnectionIds, lobby);
+
+    return {};
 };
