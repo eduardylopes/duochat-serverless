@@ -18,20 +18,24 @@ exports.handler = async event => {
 
     if (!user) {
         await sendToOne(connectionId, 'User not found');
+        return {};
     }
 
-    const room = await Room.findById(id).populate({
-        path: 'users',
-        model: User,
-    });
+    const room = await Room.findById(id);
 
     const isRoomFull = room.users.length >= room.maxUsers;
-    if (isRoomFull) throw new AppError('The room is full', 400);
+    if (isRoomFull) {
+        await sendToOne(connectionId, 'This room is full');
+        return {};
+    }
 
     if (room.password) {
         const isPasswordCorrect = password === room.password;
 
-        if (!isPasswordCorrect) throw new AppError('Invalid password', 400);
+        if (!isPasswordCorrect) {
+            await sendToOne(connectionId, 'Invalid password');
+            return {};
+        }
     }
 
     const updatedRoom = await Room.findByIdAndUpdate(
@@ -41,6 +45,8 @@ exports.handler = async event => {
     )
         .populate({ path: 'users', model: User })
         .populate({ path: 'messages', model: Message });
+
+    console.log('updatedRoom', updatedRoom);
 
     const roomConnectionIds = updatedRoom.users.map(user => user.connectionId);
     await sendToMultiple(roomConnectionIds, room);
