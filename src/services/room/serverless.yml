@@ -30,6 +30,7 @@ functions:
                   path: /room
                   method: GET
                   cors: true
+
     deleteRoom:
         handler: src/services/room/lambdas/delete-room.handler
         events:

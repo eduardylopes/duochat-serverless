@@ -34,8 +34,8 @@ exports.handler = async event => {
             .populate({ path: 'users', model: User })
             .populate({ path: 'messages', model: Message });
 
-        // const connectionIds = updatedRoom.users.map(user => user.connectionId);
-        // await sendToMultiple(connectionIds, updatedRoom);
+        const connectionIds = updatedRoom.users.map(user => user.connectionId);
+        await sendToMultiple(connectionIds, updatedRoom);
 
         return new ResponseModel({
             statusCode: 201,

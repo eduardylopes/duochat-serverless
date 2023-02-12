@@ -34,12 +34,12 @@ exports.handler = async event => {
                 404,
             );
 
-        // await deleteConnection(user.connectionId);
+        await deleteConnection(user.connectionId);
 
-        // const roomConnectionIds = updatedLobby.users.map(
-        //     user => user.connectionId,
-        // );
-        // await sendToMultiple(roomConnectionIds, updatedRoom);
+        const roomConnectionIds = updatedLobby.users.map(
+            user => user.connectionId,
+        );
+        await sendToMultiple(roomConnectionIds, updatedRoom);
 
         const updatedLobby = await Lobby.findOne({ rooms: id })
             .populate({
@@ -52,10 +52,10 @@ exports.handler = async event => {
             })
             .populate({ path: 'users', model: User });
 
-        // const lobbyConnectionIds = updatedLobby.users.map(
-        //     user => user.connectionId,
-        // );
-        // await sendToMultiple(lobbyConnectionIds, updatedLobby);
+        const lobbyConnectionIds = updatedLobby.users.map(
+            user => user.connectionId,
+        );
+        await sendToMultiple(lobbyConnectionIds, updatedLobby);
 
         return new ResponseModel({
             statusCode: 200,

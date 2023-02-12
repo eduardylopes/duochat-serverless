@@ -36,10 +36,10 @@ exports.handler = async event => {
 
         if (!updatedLobby) throw new AppError('Lobby not found', 404);
 
-        // const lobbyConnectionIds = updatedLobby.users.map(
-        //     user => user.connectionId,
-        // );
-        // await sendToMultiple(lobbyConnectionIds, updatedLobby);
+        const lobbyConnectionIds = updatedLobby.users.map(
+            user => user.connectionId,
+        );
+        await sendToMultiple(lobbyConnectionIds, updatedLobby);
 
         return new ResponseModel({
             statusCode: 201,

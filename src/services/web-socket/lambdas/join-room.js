@@ -41,8 +41,8 @@ exports.handler = async event => {
         .populate({ path: 'users', model: User })
         .populate({ path: 'messages', model: Message });
 
-    // const roomConnectionIds = updatedRoom.users.map(user => user.connectionId);
-    // await sendToMultiple(roomConnectionIds, room);
+    const roomConnectionIds = updatedRoom.users.map(user => user.connectionId);
+    await sendToMultiple(roomConnectionIds, room);
 
     const lobby = await Lobby.findOne({ rooms: room._id })
         .populate({
@@ -55,6 +55,6 @@ exports.handler = async event => {
         })
         .populate({ path: 'users', model: User });
 
-    // const lobbyConnectionIds = lobby.users.map(user => user.connectionId);
-    // await sendToMultiple(lobbyConnectionIds, lobby);
+    const lobbyConnectionIds = lobby.users.map(user => user.connectionId);
+    await sendToMultiple(lobbyConnectionIds, lobby);
 };

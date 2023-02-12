@@ -30,6 +30,7 @@ functions:
                   path: /user
                   method: GET
                   cors: true
+
     deleteUser:
         handler: src/services/user/lambdas/delete-user.handler
         events:

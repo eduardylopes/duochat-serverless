@@ -41,8 +41,8 @@ exports.handler = async event => {
                 model: User,
             });
 
-        // const connectionIds = room.users.map(user => user.connectionId);
-        // await sendToMultiple(connectionIds, room);
+        const connectionIds = room.users.map(user => user.connectionId);
+        await sendToMultiple(connectionIds, room);
 
         return new ResponseModel({
             statusCode: 200,

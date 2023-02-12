@@ -42,15 +42,15 @@ exports.handler = async event => {
             })
             .populate({ path: 'users', model: User });
 
-        // const removeUsersConnected = deletedRoom.users.map(connectionId =>
-        //     deleteConnection(connectionId),
-        // );
-        // await Promise.all(removeUsersConnected);
+        const removeUsersConnected = deletedRoom.users.map(connectionId =>
+            deleteConnection(connectionId),
+        );
+        await Promise.all(removeUsersConnected);
 
-        // const lobbyConnectionIds = updatedLobby.users.map(
-        //     user => user.connectionId,
-        // );
-        // await sendToMultiple(lobbyConnectionIds, updatedLobby);
+        const lobbyConnectionIds = updatedLobby.users.map(
+            user => user.connectionId,
+        );
+        await sendToMultiple(lobbyConnectionIds, updatedLobby);
 
         return new ResponseModel({
             statusCode: 200,

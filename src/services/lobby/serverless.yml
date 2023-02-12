@@ -30,6 +30,7 @@ functions:
                   path: /lobby
                   method: GET
                   cors: true
+
     deleteLobby:
         handler: src/services/lobby/lambdas/delete-lobby.handler
         events:

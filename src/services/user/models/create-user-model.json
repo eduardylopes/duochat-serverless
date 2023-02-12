@@ -4,7 +4,7 @@
     "title": "Create User Model",
     "type": "object",
     "properties": {
-        "userName": { "type": "number", "minLength": 3, "maxLength": 10 },
+        "userName": { "type": "string", "minLength": 3, "maxLength": 10 },
         "avatar": { "type": "string" },
         "connectionId": { "type": "string" }
     },

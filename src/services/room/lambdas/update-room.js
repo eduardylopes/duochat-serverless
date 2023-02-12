@@ -24,8 +24,8 @@ exports.handler = async event => {
 
         if (!updatedRoom) throw new AppError('Room not found', 404);
 
-        // const connectionIds = updatedRoom.users.map(user => user.connectionId);
-        // await sendToMultiple(connectionIds, updatedRoom);
+        const connectionIds = updatedRoom.users.map(user => user.connectionId);
+        await sendToMultiple(connectionIds, updatedRoom);
 
         const updatedLobby = await Lobby.findOne({ rooms: id })
             .populate({
@@ -38,10 +38,10 @@ exports.handler = async event => {
             })
             .populate({ path: 'users', model: User });
 
-        // const lobbyConnectionIds = updatedLobby.users.map(
-        //     user => user.connectionId,
-        // );
-        // await sendToMultiple(lobbyConnectionIds, updatedLobby);
+        const lobbyConnectionIds = updatedLobby.users.map(
+            user => user.connectionId,
+        );
+        await sendToMultiple(lobbyConnectionIds, updatedLobby);
 
         return new ResponseModel({
             statusCode: 200,
