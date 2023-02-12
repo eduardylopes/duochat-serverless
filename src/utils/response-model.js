@@ -1,4 +1,4 @@
-export class ResponseModel {
+class ResponseModel {
     constructor({ data, statusCode = 500, message = 'Internal server error' }) {
         this.statusCode = statusCode;
 
@@ -25,3 +25,5 @@ export class ResponseModel {
         };
     }
 }
+
+module.exports = { ResponseModel };

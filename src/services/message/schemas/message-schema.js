@@ -1,4 +1,4 @@
-import mongoose from mongoose;
+const mongoose = require('mongoose');
 
 const messageSchema = new mongoose.Schema(
     {
@@ -11,4 +11,6 @@ const messageSchema = new mongoose.Schema(
     },
 );
 
-export const Message = mongoose.model('Message', messageSchema);
+const Message = mongoose.model('Message', messageSchema);
+
+module.exports = { Message };

@@ -1,10 +1,10 @@
-import mongoose from 'mongoose';
-import { ResponseModel } from '../../../utils/response-model.js';
-import { Room } from '../schemas/room-schema.js';
+const mongoose = require('mongoose');
+const { ResponseModel } = require('../../../utils/response-model');
+const { Room } = require('../schemas/room-schema');
 
 mongoose.connect(process.env.MONGODB_URI);
 
-export async function handler() {
+exports.handler = async () => {
     try {
         const rooms = await Room.find();
 
@@ -16,4 +16,4 @@ export async function handler() {
     } catch (error) {
         return new ResponseModel({ data: error });
     }
-}
+};

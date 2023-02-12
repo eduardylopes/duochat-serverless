@@ -1,6 +1,6 @@
-import { ResponseModel } from '../../../utils/response-model.js';
+const { ResponseModel } = require('../../../utils/response-model');
 
-export const handler = async event => {
+exports.handler = async event => {
     console.log('requestContext-----------------', event.requestContext);
 
     return new ResponseModel({

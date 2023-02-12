@@ -1,13 +1,13 @@
-import mongoose from 'mongoose';
-import { sendToMultiple } from '../../../utils/api-gateway-management.js';
-import { ResponseModel } from '../../../utils/response-model.js';
-import { Lobby } from '../../lobby/schemas/lobby-schema.js';
-import { Room } from '../../room/schemas/room-schema.js';
-import { User } from '../../user/schemas/user-schema.js';
+const mongoose = require('mongoose');
+const { sendToMultiple } = require('../../../utils/api-gateway-management');
+const { ResponseModel } = require('../../../utils/response-model');
+const { Lobby } = require('../../lobby/schemas/lobby-schema');
+const { Room } = require('../../room/schemas/room-schema');
+const { User } = require('../../user/schemas/user-schema');
 
 mongoose.connect(process.env.MONGODB_URI);
 
-export const handler = async event => {
+exports.handler = async event => {
     const { connectionId } = event.requestContext;
     const { id } = JSON.parse(event.body);
 

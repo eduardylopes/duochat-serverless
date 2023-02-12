@@ -1,7 +1,6 @@
 {
     "name": "duochat-serverless",
     "version": "1.0.0",
-    "type": "module",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "sls:deploy": "serverless deploy",

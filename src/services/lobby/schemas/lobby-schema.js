@@ -1,4 +1,4 @@
-import mongoose from mongoose;
+const mongoose = require('mongoose');
 
 const lobbySchema = new mongoose.Schema(
     {
@@ -11,4 +11,6 @@ const lobbySchema = new mongoose.Schema(
     },
 );
 
-export const Lobby = mongoose.model('Lobby', lobbySchema);
+const Lobby = mongoose.model('Lobby', lobbySchema);
+
+module.exports = { Lobby };

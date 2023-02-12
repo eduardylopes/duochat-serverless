@@ -1,11 +1,11 @@
-import mongoose from 'mongoose';
-import { AppError } from '../../../utils/app-error.js';
-import { ResponseModel } from '../../../utils/response-model.js';
-import { findByIdAndDelete } from '../schemas/lobby-schema.js';
+const mongoose = require('mongoose');
+const { AppError } = require('../../../utils/app-error');
+const { ResponseModel } = require('../../../utils/response-model');
+const { findByIdAndDelete } = require('../schemas/lobby-schema');
 
 mongoose.connect(process.env.MONGODB_URI);
 
-export const handler = async event => {
+exports.handler = async event => {
     const { id } = JSON.parse(event.body);
 
     try {

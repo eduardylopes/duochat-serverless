@@ -1,10 +1,10 @@
-import mongoose from 'mongoose';
-import { ResponseModel } from '../../../utils/response-model.js';
-import { Lobby } from '../schemas/lobby-schema.js';
+const mongoose = require('mongoose');
+const { ResponseModel } = require('../../../utils/response-model');
+const { Lobby } = require('../schemas/lobby-schema');
 
 mongoose.connect(process.env.MONGODB_URI);
 
-export const handler = async () => {
+const handler = async () => {
     try {
         const lobbies = await Lobby.find();
 
