@@ -1,4 +1,4 @@
-const { ResponseModel } = require('../../../utils/response-model');
+const ResponseModel = require('../../../utils/response-model');
 const mongoose = require('mongoose');
 const User = require('../schemas/user-schema');
 
@@ -17,10 +17,11 @@ exports.handler = async event => {
             data: savedUser,
         });
     } catch (error) {
+        console.log('error', error);
         if (error.code === 11000) {
             return new ResponseModel({
                 statusCode: 400,
-                message: 'Username already in use',
+                message: 'Username or connectionId already in use',
             });
         }
         return new ResponseModel({ data: error });

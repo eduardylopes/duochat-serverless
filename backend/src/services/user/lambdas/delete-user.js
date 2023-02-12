@@ -1,5 +1,5 @@
-const { ResponseModel } = require('../../../utils/response-model');
-const { AppError } = require('../../utils/app-error');
+const ResponseModel = require('../../../utils/response-model');
+const AppError = require('../../utils/app-error');
 const mongoose = require('mongoose');
 const User = require('../schemas/user-schema');
 

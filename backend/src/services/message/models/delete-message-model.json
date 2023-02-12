@@ -1,11 +1,11 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "additionalProperties": false,
-    "title": "Delete Room Model",
+    "title": "Delete Message Model",
     "type": "object",
     "properties": {
         "id": { "type": "string" },
-        "userId": { "type": "string"}
+        "userId": { "type": "string" }
     },
     "required": ["id", "userId"]
 }

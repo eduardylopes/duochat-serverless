@@ -3,6 +3,7 @@ const AppError = require('../../../utils/app-error');
 const mongoose = require('mongoose');
 const Room = require('../schemas/room-schema');
 const Lobby = require('../../lobby/schemas/lobby-schema');
+const User = require('../../user/schemas/user-schema');
 const {
     deleteConnection,
     sendToMultiple,
@@ -11,25 +12,32 @@ const {
 mongoose.connect(process.env.MONGODB_URI);
 
 exports.handler = async event => {
-    const { id, userId } = JSON.parse(event.body);
+    const { roomId, userId, adminId } = JSON.parse(event.body);
 
     try {
-        const deletedRoom = await Room.findOneAndDelete({
-            _id: id,
-            adminId: userId,
-        });
+        const user = await User.findById(userId);
 
-        if (!deletedRoom)
+        if (!user) throw new AppError('User not found', 404);
+
+        const updatedRoom = await Room.findOneAndUpdate(
+            { _id: roomId, adminId },
+            { $pull: { users: userId } },
+            { new: true },
+        );
+
+        if (!updatedRoom)
             throw new AppError(
                 'Room not found or user is not the admin of the room',
                 404,
             );
 
-        const updatedLobby = await Lobby.updateOne(
-            { rooms: id },
-            { $pull: { rooms: id } },
-            { new: true },
-        )
+        const roomConnectionIds = updatedLobby.users.map(
+            user => user.connectionId,
+        );
+
+        await sendToMultiple(roomConnectionIds, updatedRoom);
+
+        const updatedLobby = await Lobby.findOne({ rooms: id })
             .populate({
                 path: 'rooms',
                 populate: {
@@ -38,19 +46,17 @@ exports.handler = async event => {
             })
             .populate('users');
 
-        const connectionIds = updatedLobby.users.map(user => user.connectionId);
-
-        await sendToMultiple(connectionIds, updatedRoom);
-
-        const removeUsersConnected = connectionIds.map(connectionId =>
-            deleteConnection(connectionId),
+        const lobbyConnectionIds = updatedLobby.users.map(
+            user => user.connectionId,
         );
 
-        await Promise.all(removeUsersConnected);
+        await sendToMultiple(lobbyConnectionIds, updatedLobby);
+
+        await deleteConnection(user.connectionId);
 
         return new ResponseModel({
             statusCode: 204,
-            message: 'Room deleted successfully',
+            message: 'User kicked successfully',
         });
     } catch (error) {
         if (error instanceof AppError) {

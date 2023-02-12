@@ -1,10 +1,10 @@
-const { ResponseModel } = require('../../../utils/response-model');
+const ResponseModel = require('../../../utils/response-model');
 const mongoose = require('mongoose');
 const Room = require('../schemas/room-schema');
 
 mongoose.connect(process.env.MONGODB_URI);
 
-exports.handler = async event => {
+exports.handler = async () => {
     try {
         const rooms = await Room.find();
 

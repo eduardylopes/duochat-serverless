@@ -5,10 +5,11 @@
     "type": "object",
     "properties": {
         "maxUsers": { "type": "number", "minimum": 1 },
+        "lobbyId": { "type": "string"},
         "password": { "type": "string" },
         "adminId": { "type": "string" },
         "isPrivate": { "type": "boolean" },
         "name": { "type": "string" }
     },
-    "required": ["name", "adminId", "isPrivate", "maxUsers"]
+    "required": ["name", "adminId", "isPrivate", "maxUsers", "lobbyId"]
 }

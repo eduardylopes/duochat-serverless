@@ -1,4 +1,4 @@
-const { ResponseModel } = require('../../../utils/response-model');
+const ResponseModel = require('../../../utils/response-model');
 const mongoose = require('mongoose');
 const User = require('../schemas/user-schema');
 

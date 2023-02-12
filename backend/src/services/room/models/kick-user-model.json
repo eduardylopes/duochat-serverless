@@ -1,0 +1,12 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "additionalProperties": false,
+    "title": "Kick User Model",
+    "type": "object",
+    "properties": {
+        "roomId": { "type": "number", "minimum": 1 },
+        "userId": { "type": "string" },
+        "adminId": { "type": "string" }
+    },
+    "required": ["roomId", "userId", "adminId"]
+}

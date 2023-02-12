@@ -1,0 +1,12 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "additionalProperties": false,
+    "title": "Update Message Model",
+    "type": "object",
+    "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "content": { "type": "string", "minLength": 1, "maxLength": 280 }
+    },
+    "required": ["id", "content", "userId"]
+}

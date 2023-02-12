@@ -1,11 +1,12 @@
 const {
     ApiGatewayManagementApiClient,
     PostToConnectionCommand,
+    DeleteConnectionCommand,
 } = require('@aws-sdk/client-apigatewaymanagementapi');
 
-const sendToOne = async (connectionId, payload, endpoint) => {
+const sendToOne = async (connectionId, payload) => {
     const client = new ApiGatewayManagementApiClient({
-        endpoint,
+        endpoint: process.env.AWS_API_GATEWAY_CONNECTION_URL,
     });
 
     const postToConnectionCommand = new PostToConnectionCommand({
@@ -26,4 +27,18 @@ const sendToMultiple = async (connectionIds, payload) => {
     return Promise.all(all);
 };
 
-module.exports = { sendToOne, sendToMultiple };
+const deleteConnection = async connectionId => {
+    const client = new ApiGatewayManagementApiClient({
+        endpoint: process.env.AWS_API_GATEWAY_CONNECTION_URL,
+    });
+
+    const deleteConnectionCommand = new DeleteConnectionCommand({
+        ConnectionId: connectionId,
+    });
+
+    const response = await client.send(deleteConnectionCommand);
+
+    return response;
+};
+
+module.exports = { sendToOne, sendToMultiple, deleteConnection };
