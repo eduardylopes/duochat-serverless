@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
-import ResponseModel from '../../../utils/response-model.js';
-import Lobby from '../schemas/lobby-schema.js';
+import { ResponseModel } from '../../../utils/response-model.js';
+import { Lobby } from '../schemas/lobby-schema.js';
 
 mongoose.connect(process.env.MONGODB_URI);
 

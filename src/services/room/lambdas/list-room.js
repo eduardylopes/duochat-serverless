@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import ResponseModel from '../../../utils/response-model.js';
+import { ResponseModel } from '../../../utils/response-model.js';
 import { Room } from '../schemas/room-schema.js';
 
 mongoose.connect(process.env.MONGODB_URI);

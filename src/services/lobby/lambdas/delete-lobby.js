@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
-import AppError from '../../../utils/app-error.js';
-import ResponseModel from '../../../utils/response-model.js';
+import { AppError } from '../../../utils/app-error.js';
+import { ResponseModel } from '../../../utils/response-model.js';
 import { findByIdAndDelete } from '../schemas/lobby-schema.js';
 
 mongoose.connect(process.env.MONGODB_URI);
