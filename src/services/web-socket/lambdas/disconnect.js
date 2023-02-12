@@ -11,11 +11,11 @@ mongoose.connect(process.env.MONGODB_URI);
 exports.handler = async event => {
     const { connectionId } = event.requestContext;
 
-    await User.findOneAndDelete({ connectionId });
+    const user = await User.findOneAndDelete({ connectionId });
 
     const updatedRoom = await Room.findOneAndUpdate(
         { users: { $elemMatch: { connectionId } } },
-        { $pull: { users: { $elemMatch: { connectionId } } } },
+        { $pull: { users: user._id } },
         { new: true },
     )
         .populate({ path: 'users', model: User })
